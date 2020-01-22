@@ -31,7 +31,9 @@ public class Dealer {
                 break;
             }
         }
-
+        for (Player i: players) {
+            i.hands.sort(new CompCard());
+        }
     }
 
     public void turn (Player player) {
@@ -42,11 +44,16 @@ public class Dealer {
         table.initChoices();
         if (table.isPass())
             pass[0] ++;
-        else if (!table.discard(player))
+        else if (table.SelectDiscard(player))
             pass[0] ++;
+        else {
+            System.out.println(player.name + " ▶︎ ");
+            new OutputCardList(table.layout, null);
+        }
+        System.out.println();
     }
 
-    public void checkResetTable () {
+    void checkResetTable() {
         if (pass[0] == pass[1]) {
             table = new Table();
             pass[0] = 0;

@@ -14,6 +14,11 @@ abstract class Player {
     abstract void showStatus();
     abstract int decideTable (int maxHand);
     abstract List<Card> choiceHand (List<List<Card>> choices);
+
+    void discard (List<Card> layout) {
+        for (Card i: layout)
+            hands.remove(i);
+    }
 }
 
 class you extends Player {
@@ -25,11 +30,7 @@ class you extends Player {
 
     @Override
     void showStatus() {
-        System.out.println(name);
-        for (Card i : hands) { System.out.print(i.soot() + " "); }
-        System.out.print("\n");
-        for (Card i : hands) { System.out.print(i.num() + " "); }
-        System.out.print("\n");
+        new OutputCardList(hands, null);
     }
 
     @Override
@@ -42,20 +43,7 @@ class you extends Player {
 
     @Override
     List<Card> choiceHand (List<List<Card>> choices) {
-        StringBuilder strSoot = new StringBuilder();
-        StringBuilder strNum = new StringBuilder();
-        for (List<Card> i : choices) {
-            if (i == null) {
-                strSoot.append("パス");
-            }else for (Card j : i) {
-                strSoot.append(j.soot());
-                strNum.append(j.num());
-            }
-            strSoot.append("  ");
-            strNum.append("  ");
-        }
-        System.out.println(strSoot);
-        System.out.println(strNum);
+        new OutputCardList (null, choices);
         return choices.get(input(choices.size()));
     }
 
@@ -69,8 +57,8 @@ class you extends Player {
         String retry = "正しい番号を入力してください。";
         while (true) {
             try {
-                int selected = Integer.parseInt(sc.next());
-                if (selected > 0 && selected < num) {
+                int selected = Integer.parseInt(sc.next()) -1;
+                if (selected >= 0 && selected < num) {
                     return selected;
                 }else {
                     System.out.println(retry);
@@ -104,7 +92,7 @@ class com extends Player {
 
     @Override
     List<Card> choiceHand(List<List<Card>> choices) {
-        return choices.get(rnd.nextInt(choices.size())-1);
+        return choices.get(rnd.nextInt(choices.size()));
     }
 }
 

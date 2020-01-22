@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class Table {
-    List<Card> layout;
+    ArrayList<Card> layout;
     List<List<Card>> choices;
     Map<Integer, List<Card>> hashHand;
     int tableNum;
@@ -36,7 +36,7 @@ class Table {
             hashmax = hashmax + hashHand.get(13).size();
             if (hashmax > 4) hashmax = 4;
         }
-        tableNum = player.decideTable(hashmax);
+        tableNum = player.decideTable(hashmax) +1;
     }
 
     void initChoices () {
@@ -73,20 +73,21 @@ class Table {
         return choices.size() == 0;
     }
 
-    boolean discard (Player player) {
-        List<Card> selected = new ArrayList<>(player.choiceHand(choices));
-        if (selected.get(0) == null) {
-            return true;
-        } else if (selected.get(0).getSoot() == 5 && selected.size() < tableNum) {
-            initChoices(tableNum - selected.size());
-            List<Card> result = selectCard(selected, tableNum - selected.size(), player);
-            layout.addAll(result);
-            layout.addAll(selected);
-        } else {
-            layout = selectCard(selected, tableNum, player);
-        }
+    boolean SelectDiscard(Player player) {
+        try {
+            List<Card> selected = new ArrayList<>(player.choiceHand(choices));
+            if (selected.get(0).getSoot() == 5 && selected.size() < tableNum) {
+                initChoices(tableNum - selected.size());
+                List<Card> result = selectCard(selected, tableNum - selected.size(), player);
+                layout.addAll(result);
+                layout.addAll(selected);
+            } else {
+                layout = (ArrayList<Card>) selectCard(selected, tableNum, player);
+            }
+            player.discard(layout);
+            return false;
 
-        return false;
+        }catch (NullPointerException e) {return true;}
     }
 
     private List<Card> selectCard(List<Card> cards, int num, Player player) {
@@ -98,9 +99,10 @@ class Table {
             for (Card i: cards){
                 cardList.add(new ArrayList<>(Collections.singletonList(i)));
             }
-            System.out.println("選んだ手札から" + num + "枚選択して下さい。");
+            if (player instanceof you) System.out.println("選んだ手札から" + num + "枚選択して下さい。");
             for (int i=0; i<num; i++){
-                System.out.println(i + "枚目");
+                if (player instanceof you) System.out.println(i+1 + "枚目");
+
                 List<Card> result = player.choiceHand(cardList);
                 results.addAll(result);
                 cardList.remove(result);
