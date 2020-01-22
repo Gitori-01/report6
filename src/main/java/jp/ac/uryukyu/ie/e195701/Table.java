@@ -9,10 +9,22 @@ class Table {
     Map<Integer, List<Card>> hashHand;
     int tableNum;
 
+    Table () {
+        layout = new ArrayList<>();
+        choices = new ArrayList<>();
+        tableNum = 0;
+        hashHand = new HashMap<>();
+    }
+
     void initHash (Player player) {
-        int currentNum = layout.get(0).getNum();
+        int currentNum;
+        try {
+            currentNum = layout.get(0).getNum();
+        }catch (IndexOutOfBoundsException e) {
+            currentNum = -1;
+        }int finalCurrentNum = currentNum;
         hashHand = player.hands.stream()
-                .filter(i -> i.getNum() > currentNum)
+                .filter(i -> i.getNum() > finalCurrentNum)
                 .collect(Collectors.groupingBy(Card::getNum));
     }
 
@@ -51,7 +63,7 @@ class Table {
     private void initChoices (int num) {
         choices.clear();
         for (int i : hashHand.keySet()) {
-            if (hashHand.get(i).size() >= num) {
+            if (hashHand.get(i).size() >= num && i != 13) {
                 choices.add(hashHand.get(i));
             }
         }
@@ -65,7 +77,7 @@ class Table {
         List<Card> selected = new ArrayList<>(player.choiceHand(choices));
         if (selected.get(0) == null) {
             return true;
-        } else if (selected.get(0).getSoot() == 5) {
+        } else if (selected.get(0).getSoot() == 5 && selected.size() < tableNum) {
             initChoices(tableNum - selected.size());
             List<Card> result = selectCard(selected, tableNum - selected.size(), player);
             layout.addAll(result);
@@ -73,6 +85,7 @@ class Table {
         } else {
             layout = selectCard(selected, tableNum, player);
         }
+
         return false;
     }
 
