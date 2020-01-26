@@ -4,16 +4,28 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class Table {
-    ArrayList<Card> layout;
-    List<List<Card>> choices;
-    Map<Integer, List<Card>> hashHand;
-    int tableNum;
+    private ArrayList<Card> layout;
+    private List<List<Card>> choices;
+    private Map<Integer, List<Card>> hashHand;
+    private int tableNum;
 
     Table () {
         layout = new ArrayList<>();
         choices = new ArrayList<>();
         tableNum = 0;
         hashHand = new HashMap<>();
+    }
+
+    int getTableNum() {
+        return tableNum;
+    }
+
+    public void setTableNum(int tableNum) {
+        this.tableNum = tableNum;
+    }
+
+    public ArrayList<Card> getLayout() {
+        return layout;
     }
 
     void initHash (Player player) {
@@ -23,6 +35,7 @@ class Table {
         }catch (IndexOutOfBoundsException e) {
             currentNum = -1;
         }int finalCurrentNum = currentNum;
+        hashHand.clear();
         hashHand = player.hands.stream()
                 .filter(i -> i.getNum() > finalCurrentNum)
                 .collect(Collectors.groupingBy(Card::getNum));
@@ -32,8 +45,8 @@ class Table {
         int hashmax = hashHand.values().stream()
                 .mapToInt(List::size)
                 .max().orElseThrow(NoSuchElementException::new);
-        if (hashHand.containsKey(13)) {
-            hashmax = hashmax + hashHand.get(13).size();
+        if (hashHand.containsKey(12)) {
+            hashmax = hashmax + hashHand.get(12).size();
             if (hashmax > 4) hashmax = 4;
         }
         tableNum = player.decideTable(hashmax) +1;
@@ -44,47 +57,61 @@ class Table {
         for (int i: hashHand.keySet()) {
             if (hashHand.get(i).size() >= tableNum) {
                 choices.add(hashHand.get(i));
-
-            }else if (i == 13) {
-                for (int j: hashHand.keySet()) {
+            }
+            if (i == 12) {
+                for (int j : hashHand.keySet()) {
                     if (hashHand.get(j).size() >= tableNum - hashHand.get(i).size() && j != i) {
                         List<Card> jokers = new ArrayList<>();
-                        for (int k=0; k < hashHand.get(i).size(); k++) {
+                        int jokerNum = hashHand.get(i).size();
+                        if (jokerNum >= tableNum)
+                            jokerNum --;
+                        for (int k=0; k<jokerNum; k++) {
                             jokers.add(hashHand.get(i).get(0));
                             choices.add(jokers);
                         }
-                        break; }
+                        break;
+                    }
                 }
             }
+
         }
-        choices.add(null);
+        if (layout.size() != 0)
+            choices.add(null);
     }
 
     private void initChoices (int num) {
         choices.clear();
         for (int i : hashHand.keySet()) {
-            if (hashHand.get(i).size() >= num && i != 13) {
+            if (hashHand.get(i).size() >= num && i != 12) {
                 choices.add(hashHand.get(i));
             }
         }
     }
 
     boolean isPass () {
-        return choices.size() == 0;
+        return choices.get(0) == null;
     }
 
     boolean SelectDiscard(Player player) {
         try {
             List<Card> selected = new ArrayList<>(player.choiceHand(choices));
-            if (selected.get(0).getSoot() == 5 && selected.size() < tableNum) {
-                initChoices(tableNum - selected.size());
-                List<Card> result = selectCard(selected, tableNum - selected.size(), player);
-                layout.addAll(result);
+            if (selected.get(0).getSoot() == 4 && selected.size() < tableNum) {
+                layout.clear();
                 layout.addAll(selected);
+                int remainCardNum = tableNum - selected.size();
+                initChoices(remainCardNum);
+                if (player instanceof you)
+                    System.out.println("🤡 に代入するカードを選んで下さい。");
+                selected = new ArrayList<>(player.choiceHand(choices));
+                List<Card> result = selectCard(selected, remainCardNum, player);
+                layout.addAll(0, result);
             } else {
+                layout.clear();
                 layout = (ArrayList<Card>) selectCard(selected, tableNum, player);
             }
             player.discard(layout);
+            System.out.println(player.name + " ▶︎ ");
+            new OutputCardList(layout, null);
             return false;
 
         }catch (NullPointerException e) {return true;}
@@ -102,7 +129,6 @@ class Table {
             if (player instanceof you) System.out.println("選んだ手札から" + num + "枚選択して下さい。");
             for (int i=0; i<num; i++){
                 if (player instanceof you) System.out.println(i+1 + "枚目");
-
                 List<Card> result = player.choiceHand(cardList);
                 results.addAll(result);
                 cardList.remove(result);

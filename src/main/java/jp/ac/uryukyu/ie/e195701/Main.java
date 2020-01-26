@@ -15,16 +15,24 @@ public class Main {
 
         Dealer dealer = new Dealer(players);
 
-        while (players.size() != 0) {
+        while (players.size() != result.size()) {
             for (Player i : players) {
-                for (Player j : players)
-                    j.showStatus();
-                dealer.turn(i);
-                dealer.checkResetTable();
-                if (i.hands.size() == 0) {
-                    result.add(i);
-                    players.remove(i);
+                if (!i.finished) {
+                    for (Player j : players)
+                        j.showStatus();
+                    dealer.turn(i);
+                    dealer.checkResetTable();
+                    dealer.waitMoment();
+                    System.out.println();
                 }
+                if (i.hands.size() == 0) {
+                    i.finished = true;
+                    if (!result.contains(i)) {
+                        result.add(i);
+                        dealer.finish(i);
+                    }
+                }
+
             }
 
         }

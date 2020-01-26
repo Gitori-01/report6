@@ -5,10 +5,12 @@ import java.util.*;
 abstract class Player {
     String name;
     ArrayList<Card> hands;
+    boolean finished;
 
     Player (String name) {
         this.name = name;
         hands = new ArrayList<>();
+        finished = false;
     }
 
     abstract void showStatus();
@@ -30,7 +32,10 @@ class you extends Player {
 
     @Override
     void showStatus() {
-        new OutputCardList(hands, null);
+        if (!finished) {
+            System.out.println(name);
+            new OutputCardList(hands, null);
+        }
     }
 
     @Override
@@ -71,7 +76,7 @@ class you extends Player {
 }
 
 class com extends Player {
-    Random rnd;
+    private Random rnd;
 
     com (String name) {
         super(name);
@@ -82,7 +87,8 @@ class com extends Player {
 
     @Override
     void showStatus() {
-        System.out.println(name + "：" + String.format("% 2d", hands.size()) + " 枚");
+        if (!finished)
+            System.out.println(name + "：" + String.format("% 2d", hands.size()) + " 枚");
     }
 
     @Override

@@ -2,7 +2,7 @@ package jp.ac.uryukyu.ie.e195701;
 
 import java.util.List;
 
-public class OutputCardList {
+class OutputCardList {
 
     OutputCardList(List<Card> list, List<List<Card>> listList) {
 

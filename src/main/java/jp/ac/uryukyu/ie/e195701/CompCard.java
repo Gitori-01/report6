@@ -10,11 +10,6 @@ public class CompCard implements Comparator<Card> {
             return -1;
         else if (o1.getNum() > o2.getNum())
             return 1;
-        else if (o1.getSoot() < o2.getSoot())
-            return -1;
-        else if (o1.getSoot() > o2.getSoot())
-            return 1;
-        else
-            return 0;
+        else return Integer.compare(o1.getSoot(), o2.getSoot());
     }
 }
