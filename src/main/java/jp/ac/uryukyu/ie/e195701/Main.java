@@ -3,6 +3,9 @@ package jp.ac.uryukyu.ie.e195701;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Created by Gitori-01
+ */
 public class Main {
     public static void main(String[] args) {
         ArrayList<Player> players = new ArrayList<>();

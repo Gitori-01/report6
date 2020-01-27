@@ -2,8 +2,18 @@ package jp.ac.uryukyu.ie.e195701;
 
 import java.util.List;
 
+/**
+ * 現在場に出てるカード(Table.layout)やyouの手札(you.hands)、選択肢(Table.choices)を標準出力する際のフォーマットを定義するクラス。
+ * 渡されたリストをリストの形態に応じて指定のフォーマットに落とし込み出力する。
+ * Created by Gitori-01
+ */
 class OutputCardList {
 
+    /**
+     * コンストラクタ
+     * @param list Table.layoutやYou.list等はここに代入。
+     * @param listList Table.choicesなどのカードが格納されたリストを選択肢として格納するリストはここに代入。
+     */
     OutputCardList(List<Card> list, List<List<Card>> listList) {
 
         if (list == null) {
