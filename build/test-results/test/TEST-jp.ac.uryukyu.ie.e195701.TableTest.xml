@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="jp.ac.uryukyu.ie.e195701.TableTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-01-27T11:55:32" hostname="MacBook-Tori.local" time="0.054">
+  <properties/>
+  <testcase name="prepareTable()" classname="jp.ac.uryukyu.ie.e195701.TableTest" time="0.018"/>
+  <testcase name="selectDiscard()" classname="jp.ac.uryukyu.ie.e195701.TableTest" time="0.029"/>
+  <testcase name="isPass()" classname="jp.ac.uryukyu.ie.e195701.TableTest" time="0.0"/>
+  <testcase name="initHash()" classname="jp.ac.uryukyu.ie.e195701.TableTest" time="0.001"/>
+  <testcase name="initChoices()" classname="jp.ac.uryukyu.ie.e195701.TableTest" time="0.001"/>
+  <system-out><![CDATA[test ▶︎ 
+♠️ ❤️ ?? 
+5  5     
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

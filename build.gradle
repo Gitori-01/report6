@@ -23,6 +23,6 @@ test {
 
 jar {
     manifest {
-        attributes  "Main-Class" : "jp.ac.uryukyu.ie.e195701"
+        attributes  "Main-Class" : "jp.ac.uryukyu.ie.e195701.Main"
     }
 }
