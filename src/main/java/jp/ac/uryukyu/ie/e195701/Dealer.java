@@ -75,7 +75,7 @@ class Dealer {
      * パスが一周続いた時に場を流すメソッド。
      */
     void checkResetTable() {
-        if (pass[0] == pass[1]) {
+        if (pass[0] >= pass[1]) {
             table = new Table();
             pass[0] = 0;
             System.out.println("\n場が流れました。");
