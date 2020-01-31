@@ -78,7 +78,7 @@ class Dealer {
         if (pass[0] >= pass[1]) {
             table = new Table();
             pass[0] = 0;
-            System.out.println("\n場が流れました。");
+            System.out.println("場が流れました。\n");
         }
     }
 
@@ -99,6 +99,7 @@ class Dealer {
     void waitMoment() {
         try {
             Thread.sleep(2000);
+            System.out.println();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

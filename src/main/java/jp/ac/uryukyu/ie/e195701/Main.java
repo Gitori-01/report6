@@ -21,12 +21,11 @@ public class Main {
         while (players.size() != result.size()) {
             for (Player i : players) {
                 if (!i.finished) {
+                    dealer.checkResetTable();
                     for (Player j : players)
                         j.showStatus();
                     dealer.turn(i);
-                    dealer.checkResetTable();
                     dealer.waitMoment();
-                    System.out.println();
                 }
                 if (i.hands.size() == 0) {
                     i.finished = true;
